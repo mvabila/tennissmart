@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>TennisSmart</title>
+
+   
+
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+
+<!-- START CALENDAR  -->
+
+<link href='fullcalendar.min.css' rel='stylesheet' />
+<script src='moment.min.js'></script>
+<script src='jquery.min.js'></script>
+<script src='fullcalendar.min.js'></script>
+
+
+<script>
+$(document).ready(function() {
+
+  var loggedInUser = sessionStorage.getItem("username");
+  if (loggedInUser){
+    $("#notLogged").hide();
+    $("#logged").show();
+    $('#usernameSpan').text(loggedInUser);
+  }
+});
+
+</script>
+
+
+
+
+<script>
+$(document).ready(function() {
+$('#calendar').fullCalendar({
+
+<!--Header Section Including Previous,Next and Today-->
+header: {
+left: 'prev,next today',
+center: 'title',
+right: 'month,agendaWeek,agendaDay'
+},
+
+<!--Default Date-->
+defaultDate: '2016-09-02',
+selectable: true,
+electHelper: true,
+      select: function(start, end) {
+        var title = prompt('Confirm your booking:');
+        var eventData;
+        if (title) {
+          eventData = {
+            title: title,
+            start: start,
+            end: end
+          };
+          $('#calendar').fullCalendar('renderEvent', eventData, true); // stick? = true
+        }
+        $('#calendar').fullCalendar('unselect');
+      },
+editable: true,
+
+<!--Event Section-->
+eventLimit: true, // allow "more" link when too many events
+events: [
+{
+title: 'Booked',
+start: '2016-09-02T10:00:00',
+end: '2016-09-02T10T11:00:00'
+},
+{
+title: 'Booked',
+start: '2016-09-02T13:00:00',
+end: '2016-09-02T10T14:00:00'
+},
+{
+title: 'Booked',
+start: '2016-09-02T16:00:00',
+end: '2016-09-02T10T17:00:00'
+},
+{
+title: 'Booked',
+start: '2016-09-03T16:00:00',
+end: '2016-09-03T10T17:00:00'
+},
+{
+title: 'Booked',
+start: '2016-09-03T19:00:00',
+end: '2016-09-03T10T20:00:00'
+},
+{
+title: 'Booked',
+start: '2016-09-08T19:00:00',
+end: '2016-09-08T10T20:00:00'
+},
+{
+title: 'Booked',
+start: '2016-09-15T15:00:00',
+end: '2016-09-15T10T16:00:00'
+},
+{
+title: 'Booked',
+start: '2016-09-03T21:00:00',
+end: '2016-09-03T10T22:00:00'
+}
+]
+});
+$('.fc-agendaDay-button').click();
+});
+
+
+
+</script>
+
+<style>
+body {
+margin: 40px 10px;
+padding: 0;
+font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
+font-size: 14px;
+}
+#calendar {
+max-width: 900px;
+margin: 0 auto;
+}
+</style>
+
+
+
+
+    
+  </head>
+  
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="index.html"><img src="logo.png" style ="margin-top:-10px;" /></a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <div id="loginbox">
+            <div id="notLogged">
+          <form class="navbar-form navbar-right">
+            <div class="form-group">
+              <input type="text" placeholder="Email" class="form-control" id="login">
+            </div>
+            <div class="form-group">
+              <input type="password" placeholder="Password" class="form-control" id="password">
+            </div>
+            <button type="button" class="btn btn-success" id="loginBtn">Log in</button>
+          </form>
+          </div>
+          <div id="logged" style="display:none; color:white; float:right; margin-top:10px">
+            Logged as <span id="usernameSpan"></span>, <a href="manage.html">Manage my bookings</a>
+          </div>
+          </div>
+        </div><!--/.navbar-collapse -->
+      </div>
+    </nav>
+
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="jumbotron">
+      <div class="container">
+      <br />
+        <p>Choose a timeslot that works for you</p>
+      </div>
+    </div>
+
+    <div class="container">
+
+      <div id='calendar'></div>
+
+
+
+
+
+      <hr>
+
+      <footer>
+         <p>
+          TennisSmart 2016
+        </p>
+      </footer>
+    </div> <!-- /container -->
+
+
+</html>

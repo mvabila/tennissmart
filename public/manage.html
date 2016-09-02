@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+    <title>TennisSmart</title>
+
+    <!-- Bootstrap -->
+
+
+    <!-- HTML5 shim and Respond.js for IE8 support of HTML5 elements and media queries -->
+    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+
+
+
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u" crossorigin="anonymous">
+
+<!-- Optional theme -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css" integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp" crossorigin="anonymous">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
+
+<script src='jquery.min.js'></script>
+
+<script>
+
+$(document).ready(function() {
+
+  var loggedInUser = sessionStorage.getItem("username");
+  if (loggedInUser){
+    $("#notLogged").hide();
+    $("#logged").show();
+    $('#usernameSpan').text(loggedInUser);
+  }
+
+  var loggedInUserId = sessionStorage.getItem('userid');
+  if(loggedInUserId){
+    $.get('/booking/user/' + loggedInUserId, function(data){
+      data.forEach(function(d){
+        $('#bookingList').prepend('<p>' + d.court + ' - ' + d.start + '- ' + d.end + '<button class="btn btn-danger" bookingid=' + d.id+ ' class="deleteBooking">Delete</button></p>');
+      })
+    });
+window.attachHandlers();
+  }
+
+window.attachHandlers = function() {
+$('.deleteBooking').click(function(evt, obj){
+  alert('hello');
+  var bookingId = obj.attr('bookingid');
+  $.delete('/delete/' + bookingId, function(data){
+    $('#bookingList').innerHtml('');
+    $.get('/booking/user/' + loggedInUserId, function(data){
+      data.forEach(function(d){
+        $('#bookingList').prepend('<p>' + d.court + ' - ' + d.start + '- ' + d.end + '<button class="btn btn-danger" bookingid=' + d.id+ ' class="deleteBooking">Delete</button></p>');
+      })
+    });
+  });
+});
+}
+
+
+$("#submitLocation").click(function() {
+  if($("#location").val() == "rafflesplace") {
+  $("#submitLocation").attr("href", "raffles.htm")
+  
+}
+else {
+  $("#submitLocation").attr("href", "javascript:alert('choose the neighborhood')")
+}
+});
+
+
+
+$("#tclubsubmit").click(function() {
+  if($("#tclub").val() == "cluba") {
+  $("#tclubsubmit").attr("href", "raffles.htm")
+}
+else if($("#tclub").val() == "clubb"){
+   $("#tclubsubmit").attr("href", "raffles.htm")
+}
+else if($("#tclub").val() == "clubc"){
+   $("#tclubsubmit").attr("href", "raffles.htm")
+}
+else{
+   $("#tclubsubmit").attr("href", "javascript:alert('choose the tennis club')")
+}
+});
+
+
+
+});
+
+
+
+
+</script>
+
+
+    
+  </head>
+  
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="container">
+        <div class="navbar-header">
+          <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar" aria-expanded="false" aria-controls="navbar">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="navbar-brand" href="index.html"><img src="logo.png" style ="margin-top:-10px;" /></a>
+        </div>
+        <div id="navbar" class="navbar-collapse collapse">
+          <div id="loginbox">
+            <div id="notLogged">
+          <form class="navbar-form navbar-right">
+            <div class="form-group">
+              <input type="text" placeholder="Email" class="form-control" id="login">
+            </div>
+            <div class="form-group">
+              <input type="password" placeholder="Password" class="form-control" id="password">
+            </div>
+            <button type="button" class="btn btn-success" id="loginBtn">Log in</button>
+          </form>
+          </div>
+          <div id="logged" style="display:none; color:white; float:right; margin-top:10px">
+            Logged as <span id="usernameSpan"></span>, <a href="manage.html">Manage my bookings</a>
+          </div>
+          </div>
+        </div><!--/.navbar-collapse -->
+      </div>
+    </nav>
+
+    <!-- Main jumbotron for a primary marketing message or call to action -->
+    <div class="jumbotron">
+      <div class="container">
+      <br />
+        <p>View, Change or Cancel your current bookings</p>
+      </div>
+      
+    </div>
+
+    <div class="container">
+      <!-- Example row of columns -->
+      <div class="row" id="bookingList">
+       
+       <p>
+        Booking 1 - Place - Time/date - (Change) - (Cancel)
+       </p>
+       <p>
+        Booking 2 - Place - Time/date - (Change) - (Cancel)
+       </p>
+        
+        <br />
+        <a href="index.html">Back to Homepage </a>
+
+      </div>
+
+      <hr>
+
+      <footer>
+
+        <p>
+          TennisSmart 2016
+        </p>
+
+      </footer>
+    </div> <!-- /container -->
+
+
+</html>
